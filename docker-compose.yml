@@ -1,0 +1,61 @@
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      #- JELLYFIN_PublishedServerUrl=http://${YOUR_SERVER_IP} #optional
+    volumes:
+      - jellyfin-library:/config
+      - jellyfin-tvseries:/data/tvshows
+      - jellyfin-movies:/data/movies
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    restart: unless-stopped
+      
+  filebrowser-tv:
+    image: filebrowser/filebrowser:latest
+    container_name: jellyfin-tv-filebrowser
+    restart: unless-stopped
+    user: "1000:1000"
+    ports:
+      - "3002:80"
+    volumes:
+      - jellyfin-tvseries:/srv 
+      - filebrowser-config:/config
+    environment:
+      - FB_DATABASE=/config/database.db
+      - FB_CONFIG=/config/config.json
+      - FB_ROOT=/srv
+
+# Add user rights: sudo chown -R 1000:1000 /var/lib/docker/volumes/jellyfin_jellyfin-tvseries/_data/
+
+  filebrowser-movie:
+    image: filebrowser/filebrowser:latest
+    container_name: jellyfin-movie-filebrowser
+    restart: unless-stopped
+    user: "1000:1000"
+
+    ports:
+      - "3003:80"
+    volumes:
+      - jellyfin-movies:/srv 
+      - filebrowser2-config:/config
+    environment:
+      - FB_DATABASE=/config/database.db
+      - FB_CONFIG=/config/config.json
+      - FB_ROOT=/srv
+
+# Add user rights: sudo chown -R 1000:1000 /var/lib/docker/volumes/jellyfin_jellyfin-movies/_data/
+
+volumes:
+  filebrowser-config: {}
+  filebrowser2-config: {}
+  jellyfin-library: {}
+  jellyfin-tvseries: {}
+  jellyfin-movies: {}
