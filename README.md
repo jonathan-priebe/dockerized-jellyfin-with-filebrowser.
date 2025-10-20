@@ -20,8 +20,8 @@ A simple Docker Compose setup for running [Jellyfin](https://jellyfin.org/) alon
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/jellyfin-filebrowser-stack.git
-   cd jellyfin-filebrowser-stack
+   git clone https://github.com/jonathan-priebe/dockerized-jellyfin-with-filebrowser
+   cd dockerized-jellyfin-with-filebrowser
    ```
 
 2. **Start the stack**
